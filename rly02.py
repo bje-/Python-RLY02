@@ -9,15 +9,12 @@ import serial
 SERIAL_PATH = '/dev/ttyACM0'
 BAUD_RATE = 9600
 
-commands = {
-    'relay_1_on': 0x65,
-    'relay_1_off': 0x6F,
-    'relay_2_on': 0x66,
-    'relay_2_off': 0x70,
-    'info': 0x5A,
-    'relay_states': 0x5B,
-}
-
+RELAY_1_ON = 0x65
+RELAY_1_OFF = 0x6F
+RELAY_2_ON = 0x66
+RELAY_2_OFF = 0x70
+INFO = 0x5A
+RELAY_STATES = 0x5B
 
 def send_command(cmd, read_response=False):
     """Send a command down the USB line"""
@@ -28,43 +25,23 @@ def send_command(cmd, read_response=False):
     return response
 
 
-def turn_relay_1_on():
-    """Turn relay 1 on"""
-    send_command(commands['relay_1_on'])
-
-
-def turn_relay_1_off():
-    """Turn relay 1 off"""
-    send_command(commands['relay_1_off'])
-
-
 def click_relay_1():
     """Click relay 1"""
-    send_command(commands['relay_1_on'])
+    send_command(RELAY_1_ON)
     time.sleep(1)
-    send_command(commands['relay_1_off'])
-
-
-def turn_relay_2_on():
-    """Turn relay 2 on"""
-    send_command(commands['relay_2_on'])
-
-
-def turn_relay_2_off():
-    """Turn relay 2 off"""
-    send_command(commands['relay_2_off'])
+    send_command(RELAY_1_OFF)
 
 
 def click_relay_2():
     """Click relay 2"""
-    send_command(commands['relay_2_on'])
+    send_command(RELAY_2_ON)
     time.sleep(1)
-    send_command(commands['relay_2_off'])
+    send_command(RELAY_2_OFF)
 
 
 def get_relay_states():
     """Get the state of the two relays"""
-    states = send_command(commands['relay_states'], read_response=True)
+    states = send_command(RELAY_STATES, read_response=True)
     response = unpack('b', states)[0]
     states = {
         0: {'1': False, '2': False},
@@ -110,11 +87,11 @@ if __name__ == '__main__':
                     action = dict_opts['-a']
 
                     actions = {
-                        '1_on': turn_relay_1_on,
-                        '1_off': turn_relay_1_off,
+                        '1_on': lambda: send_command(RELAY_1_ON),
+                        '1_off': lambda: send_command(RELAY_1_OFF),
                         '1_click': click_relay_1,
-                        '2_on': turn_relay_2_on,
-                        '2_off': turn_relay_2_off,
+                        '2_on': lambda: send_command(RELAY_2_ON),
+                        '2_off': lambda: send_command(RELAY_2_OFF),
                         '2_click': click_relay_2,
                     }
                     actions['%s_%s' % (relay, action)]()
