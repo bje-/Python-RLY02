@@ -1,5 +1,6 @@
 """Control an RLY02 USB relay"""
 
+import argparse
 import time
 import getopt
 import sys
@@ -52,59 +53,28 @@ def get_relay_states():
     return states[response]
 
 
-def usage():
-    """Print usage"""
-    print """Change relay status:
-    python rly02.py -r [1,2] -a [on, off, click]
-Get device info:
-    python rly02.py -i
-Get relay states:
-    python rly02.py -s
-Help!;
-    python rly02.py -h
-"""
-
-
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-r", type=int, choices=[1,2], help='relay number')
+    parser.add_argument("-a", type=str, choices=['on', 'off', 'click'], help='action')
+    parser.add_argument("-s", action="store_true", help='get relay states')
+    args = parser.parse_args()
 
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hr:a:is",
-                                   ["help", None, None, "info", "states"])
-        dict_opts = {}
-        for o, a in opts:
-            dict_opts[o] = a
-    except getopt.GetoptError:
-        print
-        usage()
-        sys.exit(2)
-
-    for o, a in opts:
-        if o in ("-r",):
-            if a in ['1', '2']:
-                relay = a
-                if '-a' in dict_opts and \
-                   dict_opts['-a'] in ['on', 'off', 'click']:
-                    action = dict_opts['-a']
-
-                    actions = {
-                        '1_on': lambda: send_command(RELAY_1_ON),
-                        '1_off': lambda: send_command(RELAY_1_OFF),
-                        '1_click': click_relay_1,
-                        '2_on': lambda: send_command(RELAY_2_ON),
-                        '2_off': lambda: send_command(RELAY_2_OFF),
-                        '2_click': click_relay_2,
-                    }
-                    actions['%s_%s' % (relay, action)]()
-
-                    sys.exit()
-                else:
-                    print "Action must be on, off or click"
-            else:
-                print "Relay must be 1 or 2"
-
-        elif o in ("-s", "--states"):
-            print get_relay_states()
-            sys.exit()
-
-    usage()
+    if args.s:
+        print get_relay_states()
+    elif (args.r is None) ^ (args.a is None):
+        parser.error('-r and -a must be given together')
+    elif (args.r is not None) and (args.a is not None):
+        actions = {
+            '1_on': lambda: send_command(RELAY_1_ON),
+            '1_off': lambda: send_command(RELAY_1_OFF),
+            '1_click': click_relay_1,
+            '2_on': lambda: send_command(RELAY_2_ON),
+            '2_off': lambda: send_command(RELAY_2_OFF),
+            '2_click': click_relay_2,
+        }
+        actions['%s_%s' % (args.r, args.a)]()
+    else:
+        parser.print_help()
+        sys.exit(1)
     sys.exit()
