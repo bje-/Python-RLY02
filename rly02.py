@@ -1,4 +1,6 @@
 import serial
+"""Control an RLY02 USB relay"""
+
 import time
 import getopt
 import sys
@@ -17,6 +19,7 @@ commands = {
 }
 
 def send_command(cmd, read_response = False):
+    """Send a command down the USB line"""
     ser = serial.Serial('/dev/ttyACM0', 9600)
     ser.write(chr(cmd)+'\n')
     response = read_response and ser.read() or None
@@ -24,28 +27,35 @@ def send_command(cmd, read_response = False):
     return response
     
 def turn_relay_1_on():
+    """Turn relay 1 on"""
     send_command(commands['relay_1_on'])
 
 def turn_relay_1_off():
+    """Turn relay 1 off"""
     send_command(commands['relay_1_off'])
 
 def click_relay_1():
+    """Click relay 1"""
     send_command(commands['relay_1_on'])
     time.sleep(1)
     send_command(commands['relay_1_off'])
 
 def turn_relay_2_on():
+    """Turn relay 2 on"""
     send_command(commands['relay_2_on'])
 
 def turn_relay_2_off():
+    """Turn relay 2 off"""
     send_command(commands['relay_2_off'])
 
 def click_relay_2():
+    """Click relay 2"""
     send_command(commands['relay_2_on'])
     time.sleep(1)
     send_command(commands['relay_2_off'])
 
 def get_relay_states():
+    """Get the state of the two relays"""
     states = send_command(commands['relay_states'], read_response=True)
     response = unpack('b',states)[0]
     states =  {
@@ -57,6 +67,7 @@ def get_relay_states():
     return states[response]
 
 def usage():
+    """Print usage"""
     print """Change relay status:
     python rly02.py -r [1,2] -a [on, off, click]
 Get device info:
