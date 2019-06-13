@@ -16,6 +16,7 @@ RELAY_2_OFF = 0x70
 INFO = 0x5A
 RELAY_STATES = 0x5B
 
+
 def send_command(cmd, read_response=False):
     """Send a command down the USB line"""
     ser = serial.Serial(SERIAL_PATH, BAUD_RATE)
