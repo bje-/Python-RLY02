@@ -26,18 +26,12 @@ def send_command(cmd, read_response=False):
     return response
 
 
-def click_relay_1():
-    """Click relay 1"""
-    send_command(RELAY_1_ON)
+def click_relay(n):
+    """Click relay"""
+    assert n in [1, 2], "argument must be 1 or 2"
+    send_command(RELAY_1_ON if n == 1 else RELAY_2_ON)
     time.sleep(1)
-    send_command(RELAY_1_OFF)
-
-
-def click_relay_2():
-    """Click relay 2"""
-    send_command(RELAY_2_ON)
-    time.sleep(1)
-    send_command(RELAY_2_OFF)
+    send_command(RELAY_1_OFF if n == 1 else RELAY_2_OFF)
 
 
 def get_relay_states():
@@ -68,10 +62,10 @@ if __name__ == '__main__':
         actions = {
             '1_on': lambda: send_command(RELAY_1_ON),
             '1_off': lambda: send_command(RELAY_1_OFF),
-            '1_click': click_relay_1,
+            '1_click': click_relay(1),
             '2_on': lambda: send_command(RELAY_2_ON),
             '2_off': lambda: send_command(RELAY_2_OFF),
-            '2_click': click_relay_2,
+            '2_click': click_relay(2),
         }
         actions['%s_%s' % (args.r, args.a)]()
     else:
