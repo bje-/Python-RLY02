@@ -62,10 +62,10 @@ if __name__ == '__main__':
         actions = {
             '1_on': lambda: send_command(RELAY_1_ON),
             '1_off': lambda: send_command(RELAY_1_OFF),
-            '1_click': click_relay(1),
+            '1_click': lambda: click_relay(1),
             '2_on': lambda: send_command(RELAY_2_ON),
             '2_off': lambda: send_command(RELAY_2_OFF),
-            '2_click': click_relay(2),
+            '2_click': lambda: click_relay(2),
         }
         actions['%s_%s' % (args.r, args.a)]()
     else:
