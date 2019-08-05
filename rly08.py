@@ -45,8 +45,10 @@ def get_relay_states():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-r", type=int, choices=range(1,9), help='relay number')
-    parser.add_argument("-a", type=str, choices=['on', 'off', 'click'], help='action')
+    parser.add_argument("-r", type=int, choices=range(1, 9),
+                        help='relay number')
+    parser.add_argument("-a", type=str, choices=['on', 'off', 'click'],
+                        help='action')
     parser.add_argument("-s", action="store_true", help='get relay states')
     args = parser.parse_args()
 
