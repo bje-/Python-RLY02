@@ -23,10 +23,11 @@ python rly02.py -s
 
 There is a separate Python program capable of controlling the RLY08
 with eight relays. It works just like the RLY02 program, but accepts
-relay numbers (`-r`) up to 8.
+relay numbers (`-r`) up to 8. This program is backwards compatible
+with the RLY02 board.
 
 ## Switch relay 7 on ##
-python rly02.py -r 7 -a on
+python rly08.py -r 7 -a on
 
 ## Switch relay 7 off ##
-python rly02.py -r 7 -a off
+python rly08.py -r 7 -a off
