@@ -19,3 +19,14 @@ python rly02.py -s
 
 *NOTE:* ensure that you have the correct permissions in /dev/ttyACM0 for your user.
 
+# Python-RLY08 #
+
+There is a separate Python program capable of controlling the RLY08
+with eight relays. It works just like the RLY02 program, but accepts
+relay numbers (`-r`) up to 8.
+
+## Switch relay 7 on ##
+python rly02.py -r 7 -a on
+
+## Switch relay 7 off ##
+python rly02.py -r 7 -a off
