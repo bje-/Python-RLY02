@@ -25,12 +25,12 @@ def send_command(cmd, read_response=False):
     return response
 
 
-def click_relay(n):
+def click_relay(relaynum):
     """Click relay"""
-    assert n in range(1, 9), "argument must be 1 to 8"
-    send_command(RELAY_ON[n])
+    assert relaynum in range(1, 9), "argument must be 1 to 8"
+    send_command(RELAY_ON[relaynum])
     time.sleep(1)
-    send_command(RELAY_OFF[n])
+    send_command(RELAY_OFF[relaynum])
 
 
 def get_relay_states():
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.s:
-        print get_relay_states()
+        print(get_relay_states())
     elif (args.r is None) ^ (args.a is None):
         parser.error('-r and -a must be given together')
     elif (args.r is not None) and (args.a is not None):
