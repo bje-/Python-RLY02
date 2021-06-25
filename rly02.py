@@ -1,4 +1,4 @@
-"""Control an RLY02 USB relay"""
+"""Control an RLY02 USB relay."""
 
 import argparse
 import time
@@ -18,7 +18,7 @@ RELAY_STATES = 0x5B
 
 
 def send_command(cmd, read_response=False):
-    """Send a command down the USB line"""
+    """Send a command down the USB line."""
     ser = serial.Serial(SERIAL_PATH, BAUD_RATE)
     ser.write(chr(cmd) + '\n')
     response = ser.read() if read_response else None
@@ -27,7 +27,7 @@ def send_command(cmd, read_response=False):
 
 
 def click_relay(relaynum):
-    """Click relay"""
+    """Click relay."""
     assert relaynum in [1, 2], "argument must be 1 or 2"
     send_command(RELAY_1_ON if relaynum == 1 else RELAY_2_ON)
     time.sleep(1)
@@ -35,7 +35,7 @@ def click_relay(relaynum):
 
 
 def get_relay_states():
-    """Get the state of the two relays"""
+    """Get the state of the two relays."""
     states = send_command(RELAY_STATES, read_response=True)
     response = unpack('b', states)[0]
     states = {
