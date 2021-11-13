@@ -20,7 +20,7 @@ RELAY_STATES = 0x5B
 def send_command(cmd, read_response=False):
     """Send a command down the USB line."""
     ser = serial.Serial(SERIAL_PATH, BAUD_RATE)
-    ser.write(chr(cmd) + '\n')
+    ser.write((chr(cmd) + '\n').encode())
     response = ser.read() if read_response else None
     ser.close()
     return response
